@@ -1,5 +1,6 @@
 package ch6;
 
+
 /**
  * - 객체지향의 공부 
  *   캡슐화, 상속, 추상화, 다형성 란?
@@ -83,9 +84,40 @@ package ch6;
  *   
  *   매개변수 : 기본형과 참조형.
  *     기본형 : 변수의 값을 읽기만 할 수 있음.(read only)
- *     참조형 : 변수의 값을 수정할 수 있음.(rad & write)
+ *     참조형 : 변수의 값을 수정할 수 있음.(read & write)
  * 
  * 
+ *   참조형 반환타입 : 참조변수의 값(instance의 주소)이 반환.
+ *   
+ *   클래스 메소드와 인스턴스 메소드
+ *      클래스 메소드 : static 키워드를 사용하면 됨.
+ *      			인스턴스와 관곙벗는 작업을 수행.
+ *         
+ *      인스턴스 메소드 : static 키워드를 사용하지 않음.
+ *      			인스턴스 변수와 관련된 작업을 수행.
+ *      			인스턴스로 생성되어야만 호출이 가능.
+ *      
+ *      - 클래스를 설계할 때, 멤버변수 중 모든 인스턴스에 공통으로 
+ *        사용하는 것에 static 를 붙인다.
+ *      - 클래스 변수(static 변수)는 인스턴스를 생성하지 않아도 사용 가능.
+ *      - 클래스 메소드(static 메소드)는 인스턴스 변수를 사용할 수 없다.
+ *      - 메소드 내에서 인스턴스 변수를 사용하지 않는다면,  static 를
+ *        붙이는것을 고려한다.
+ *   
+ * - 오버로딩
+ *   한 클래스 내에서 같은 이름의 메소드를 여러 개 정의하는 것.
+ *   
+ *   조건 : 메소드 이름이 동일. 매개변수의 개수와 타입으로 구분.
+ *         static, 메소드의 반환타입은 조건에 해당되지 않음.
+ *   
+ *   장점 : 메소드의 이름만 보더라도 이 메소드의 기능을 예상할 수 있음.
+ *         메소드의 이름을 절약.
+ *         
+ * - 가변 매개변수
+ * 
+ * ################# 본격적인 OOP ###########################
+ * 
+ * OopEx2.java 로 이어짐.
  * 
  */
 public class OopEx {
@@ -93,7 +125,7 @@ public class OopEx {
 	// 프로그램의 시작점.
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-
+		
 		// 다른 클래스를 재사용해서 코딩.
 		// String 과 같은 API 대신에 사용자 정의 클래스를 사용.
 		Tv t; //Tv변수만 선언된 상태이지, 인스턴스(메모리 적재) 상태가 아님. 
@@ -204,7 +236,84 @@ public class OopEx {
 		
 		System.out.println("final 2 = " + d.x);
 		
+		Data d2 = copy(d);
+		
+		System.out.println("d2.x = " + d2.x);
+		
+		MyMath mm = new MyMath();//기본 생성자 호출.
+		
+		// 클래스 메소드 호출 => 인스턴스가 생성되지 않는 상태.
+		System.out.println("MyMath.add = " + MyMath.add(100L, 200L));
+		
+		// 인스턴스 메소드 호출 => 인스턴스 생성이 필수
+		// 인스턴스 메소드
+		mm.a = 400L;
+		mm.b = 200L;
+		System.out.println("mm.add = " + mm.add());
+		// 클래스(static) 메소드
+		// 인스턴스 변수를 매개변수로 사용
+		System.out.println("mm.add(mm.a, mm.b) = " + mm.add(mm.a, mm.b));
+		// 인스턴스 변수의 값이 복사가 됨.
+		
+		// 인스턴스 변수를 사용하지 않고 매개변수 초기화.
+		System.out.println(mm.add(500L, 500L));
+		mm.add(500L, 500L);// 현재의 매개변수 500L 은 상수임.
+							// 상수 500L 이 값복사로 메소드에 전달됨.
+		
+		
+		// 가변 매개변수 메소드 호출
+		String[] strArr = {"100", "200", "300"};
+		System.out.println(concatenate("--", strArr));
+		
+		String[] strArr2 = {"100", "200", "300", "100", "200", "300"};
+		System.out.println(concatenate("--", strArr2));
+		
+		concatenate(null);
+		concatenate2(null);
+		
+		concatenate("", new String[0]);
+		concatenate2(new String[0]);
+		
+		concatenate("", "");
+		
+		//배열 매개변수 메소드
+		concatenate2(new String[0]);
+		// concatenate2();
+		
+		//가변 매개변수 메소드
+		concatenate3();
+		
 	} // end of Main()
+	
+	// 가변 매개변수 메소드
+	// String...strings : 배열의 요소가 2개 or 3개 이상.
+	static String concatenate(String delim, String...strings) {
+		String result = "";
+		
+		for(String str : strings) {
+			result += str + delim;
+		}
+		
+		return result;
+	}
+	
+	static String[] concatenate2(String[]strings) {
+		return strings;
+	}
+	
+	static String[] concatenate3(String...strings) {
+		return strings;
+	}
+	
+	// 참조형 반환타입의 메소드
+	// 사용되는 쪽이 main() 라서 static 메소드로 만듬.
+	static Data copy(Data d) {
+		Data tmp = new Data();
+		tmp.x = d.x; // 인스턴스변수의 값을 복사.
+		
+		return tmp;
+	}
+	
 	
 	// 기본형 매개변수의 메소드( 오버로딩 메소드 )
 	static void change(int x) { // int x = 10;
@@ -218,6 +327,50 @@ public class OopEx {
 		System.out.println(d.x);
 	}
 }
+
+// 클래스 메소드, 인스턴스 메소드 관련 클래스
+class MyMath {
+	long a, b;
+	
+	// 인스턴스 메소드
+	// 인스턴스 변수임을 명시적으로 나타내기 위해
+	// 자기참조변수(this)를 사용하면 확실하게 구분이 됨.
+	long add() { return a + b;}
+	
+	
+	
+	// 클래스(static) 메소드
+	// 오버로딩에 static 는 관계가 없다. 매개변수로 차이가 됨.
+	
+	// 클래스 메소드는 인스턴스 상태이던 아니던 모두 사용(호출) 가능.
+	// 단, 클래스 메소드 자체 내에서는 인스턴스는 사용할 수 없음.
+	
+	static long add(long a, long b) 
+	{ 
+		// static 메소드 안에서는 인스턴스는 사용할 수 없음. 
+		//this.add();
+		// 아래의 a, b는 지역변수임. 인스턴스 변수가 아님.
+		return a + b; 
+	}
+	
+	static long add(int a, long b) 
+	{ 
+		// static 메소드 안에서는 인스턴스는 사용할 수 없음. 
+		//this.add();
+		// 아래의 a, b는 지역변수임. 인스턴스 변수가 아님.
+		return a + b; 
+	}
+	
+	static long add(int a, long b, long c) 
+	{ 
+		// static 메소드 안에서는 인스턴스는 사용할 수 없음. 
+		//this.add();
+		// 아래의 a, b는 지역변수임. 인스턴스 변수가 아님.
+		return a + b; 
+	}
+	
+}
+
 
 // 기본형 매개변수, 참조형 매개변수 용 클래스
 class Data { int x; };
