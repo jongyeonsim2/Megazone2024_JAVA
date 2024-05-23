@@ -117,7 +117,7 @@ package ch6;
  * 
  * ################# 본격적인 OOP ###########################
  * 
- * OopEx2.java 로 이어짐.
+ * OopEx2.java 로 이어
  * 
  */
 public class OopEx {
