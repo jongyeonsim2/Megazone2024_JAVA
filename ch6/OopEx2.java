@@ -93,6 +93,32 @@ package ch6;
  *   클래스 변수 : 기본값 -> 명시적 초기화 -> 클래스 초기화 블럭
  *   인스턴스 변수 : 기본값 -> 명시적 초기화 -> 인스턴스 초기화 블럭 -> 생성자
  * 
+ * ################# 클래스 간의 관계 ###########################
+ * 
+ * - 상속
+ *   조상 클래스 : 부모 클래스, 상위 클래스, 기반 클래스
+ *   자식 클래스 : 자손 클래스, 하위 클래스, 파생된 클래스
+ *   
+ * - 장점
+ *   상속을 통하면 보다 적은 양의 코드로 새로운 클래스를 작성.
+ *   코드의 추가 및 변경이 매우 용이해짐.
+ *   
+ * - 단점
+ *   강결합의 가능성이 있을 수 있음.
+ *   
+ * - 관계
+ *   논리적으로 합당한 관계
+ *   
+ *   상속관계 : is-a 관계. ~은 ~이다.
+ *   	사람, 학생. 학생은 사람이다. => 학생 extends 사람
+ *      권총, 경찰. 경찰은 권총을 가지고 있다. => 논리적 성립 불가
+ *   포함관계 : has-a 관계. ~은 ~ 가지고 있다.
+ *      사람, 학생. 학생은 사람을 가지고 있다.
+ *      권총, 경찰. 경찰은 권총을 가지고 있다. => 논리적 성립 가능 => 멤버변수 가능성
+ *   
+ * - 문법적 관계
+ *   extends
+ * 
  */
 
 public class OopEx2 {
@@ -144,9 +170,142 @@ public class OopEx2 {
 		
 		// 초기화 블럭 및 생성자 진행 순서 확인
 		OopEx2 ope2 = new OopEx2();
-	}
+		
+		// Product class 사용.
+		Product p1 = new Product();
+		Product p2 = new Product();
+		Product p3 = new Product();
+		
+		// 포커카드 게임
+		Deck d = new Deck(); // 52장의 포커 카드 준비 완료.
+		PockerCard c = d.pick();
+		System.out.println(c.toString());
+		
+		c = d.pick(1);
+		System.out.println(c.toString());
+		
+		d.shuffle();
+		c = d.pick(1);
+		System.out.println(c.toString());
+		
+		
+	}//end of main()
 
 }
+
+
+// 포커카드
+class PockerCard {
+	// 카드의 무늬 수
+	static final int KIND_MAX = 4;
+	// 카드의 무늬 별 총 수량
+	static final int NUM_MAX = 13;
+	
+	static final int SPADE = 4;
+	static final int DIAMOND = 3;
+	static final int HEART = 2;
+	static final int CLOVER = 1;
+	
+	// 카드별 무늬 및 숫자
+	int kind;
+	int number;
+	
+	PockerCard() {
+		this(SPADE, 13);
+	}
+	
+	PockerCard(int kind, int number) {
+		this.kind = kind;
+		this.number = number;
+	}
+	
+	// 현재 인스턴스 카드 한 장의 정보를 출력
+	public String toString() {
+		String[] kinds = {"","CLOVER","HEART","DIAMOND","SPADE"};
+		String numbers = "0123456789XJQK";
+
+		return "kind : " + kinds[this.kind] +
+				", number : " + numbers.charAt(this.number);
+	}
+}
+
+// 포커카드 한 세트
+// 포커카드 한 벌은 52장의 포커 카드를 가지고 있다. (포함관계 => 멤버변수 => 객체배열)
+class Deck {
+	// 클래스변수
+	final int CARD_NUM = 52;
+	
+	// 52장의 포커카드 인스턴스 변수
+	PockerCard cardArr[] = new PockerCard[CARD_NUM];
+	
+	// 구현 대상!!!!!!
+	// 생성자, 52장의 포커카드 인스턴스를 생성, 객체배열에 저장.
+	Deck () {
+		// 무늬 4개, 각 13장 => 중첩 반복문 => cardArr[] 저장.
+		
+	}
+	
+	
+	// 카드 뽑기 오버로딩, 인스턴스 메소드
+	PockerCard pick(int idx) {
+		return cardArr[idx];
+	}
+	
+	// 구현 대상!!!!!!
+	PockerCard pick() {
+		// 난수를 이용해서 임의의 카드를 뽑을 수 있도록 배열의 위치정보 생성.
+		int idx = 0;
+		
+		return pick(idx);
+	}
+	
+	// 구현 대상!!!!!!
+	// 카드 섞기, 인스턴스 메소드
+	void shuffle() {
+		// 난수를 이용해서 임의의 카드를 뽑을 수 있도록 배열의 위치정보 생성.
+	}
+	
+}
+
+
+
+// 상속 관련 클래스
+// Parent, Child 는 is-a 관계 => extends
+// Parent, Child 는 직접 상속 관계
+class Parent {
+	int age;
+}
+
+class Child1 extends Parent {}
+class Child2 extends Parent {}
+
+// Parent 기준으로는 간접 상속관계
+// Child1 기준으로는 직접 상속관계
+class GrandChild extends Child1 {}
+
+
+// 포함 관련 클래스
+// Pistol, Police 는 has-a 관계 => Pistol 은 Police 의 멤버변수.
+class Pistol {}
+class Police {
+	Pistol p = new Pistol();
+}
+
+class Point {
+	int x;
+	int y;
+}
+
+class Circle {
+	Point c = new Point();
+	int r;
+}
+
+class Triangle {
+	Point[] p = new Point[3];
+}
+
+
 
 // 클래스 변수를 이용한 인스턴스 변수 초기화
 class Product {
