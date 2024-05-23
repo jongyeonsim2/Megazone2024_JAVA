@@ -243,6 +243,13 @@ class Deck {
 	Deck () {
 		// 무늬 4개, 각 13장 => 중첩 반복문 => cardArr[] 저장.
 		
+		// 배열의 인덱스 변수
+		int i = 0;
+		
+		// outter for : 무늬 담당 , inner for : 무늬별 카드 숫자 담당
+		for(int k=PockerCard.KIND_MAX; k > 0; k--)// 4, 3, 2, 1
+			for(int n=0; n<PockerCard.NUM_MAX; n++)
+				cardArr[i++] = new PockerCard(k, n);
 	}
 	
 	
@@ -255,7 +262,8 @@ class Deck {
 	PockerCard pick() {
 		// 난수를 이용해서 임의의 카드를 뽑을 수 있도록 배열의 위치정보 생성.
 		int idx = 0;
-		
+		idx = (int)(Math.random() * CARD_NUM); // 0.0 ~ 1.0 => 0 ~ 52
+						// 1.0 * 52 = 52
 		return pick(idx);
 	}
 	
@@ -263,6 +271,14 @@ class Deck {
 	// 카드 섞기, 인스턴스 메소드
 	void shuffle() {
 		// 난수를 이용해서 임의의 카드를 뽑을 수 있도록 배열의 위치정보 생성.
+		for(int i =0; i < cardArr.length; i++) 
+		{
+			int idx = (int)(Math.random() * CARD_NUM);
+			
+			PockerCard tmp = cardArr[i];
+			cardArr[i] = cardArr[idx];
+			cardArr[idx] = tmp;
+		}
 	}
 	
 }
