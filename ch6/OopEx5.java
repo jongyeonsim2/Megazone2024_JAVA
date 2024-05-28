@@ -232,7 +232,7 @@ class NewXMLParser implements Parseable {
 }
 
 
-
+// 응집도가 높게 구현함.
 class HTMLParser implements Parseable {
 
 	@Override
@@ -241,6 +241,17 @@ class HTMLParser implements Parseable {
 	}
 	
 }
+
+
+// Parser 인스턴스 생성 대리자 클래스 => 약결합을 위한 클래스, 사용 편리성
+class ParserManager {
+	public static Parseable getParser() {
+		//return new XMLParser();
+		//return new NewXMLParser();
+		return new HTMLParser();
+	}
+}
+
 
 
 
@@ -361,6 +372,17 @@ public class OopEx5 {
 		factory.liftOff();
 		factory.land();
 
+		
+		// ----------------- parser 기능 동작 테스트 -------------------
+		// XML, HTML 관련 Parser class 를 직접 호출해서 사용하지 않으면 => 약결합.
+		// 인스턴스 생성을 대리자(별도의 클래스)를 통해서 수행하면,
+		// main() method 와의 직접적인 관계는 없어짐. => 약결합
+		
+		// 인터페이스 형태로 반환이 되도록 해야함. => 약결합
+		
+		// 현재는 Parseable 반환되므로, NewXMLParser 가 되던, XMLParser 되던
+		// 사용하는 쪽에서는 모르고 사용.
+		Parseable parser = ParserManager.getParser();
 	}
 
 }
