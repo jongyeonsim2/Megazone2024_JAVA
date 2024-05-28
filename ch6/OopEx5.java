@@ -162,8 +162,63 @@ package ch6;
  * 
  * 
  * 
+ * 인터페이스의 장점
+ * 1. 개발 시간을 단축할 수 있음. or 독립적인 프로그래밍이 가능. => 생산성과 관련됨.
+ * 2. 표준화가 가능 => 생산성과 관련됨.
+ * 3. 관계가 없는 것끼리 맺어줄 수 있음.
+ * 
+ * 
+ * 
  */
 
+
+
+// 강결합된 상태임. class A와 class B.
+// 다른 쪽의 코드가 완성이 되기까지 기다려야 함. 
+//     => 생산성이 떨어짐. 독립적인 프로그래밍이 불가능.
+
+/* 강결합 스타일의 코드 작성. 
+class A {
+	public void methodA(B b) {
+		b.methodB();
+	}
+}
+
+class B {
+	public void methodB() {
+		System.out.println("methodB()");
+	}
+}
+*/
+
+
+// 강결합을 약결합으로 변경.(결합도가 낮아짐.)
+
+class A {
+	public void methodA(I b) {
+		b.methodB();
+	}
+}
+
+// 인터페이스를 활용하면, class A 쪽에 영향이 가지 않음.
+// class A 를 구현하는 팀원 class B2 의 완성까지 기다리지 않아도 됨.
+// 독립적인 프로그래밍이 가능 and 유지보수성이 높아짐. => 생산성이 높아짐.
+// => 개발시간의 단축
+class B2 implements I {
+
+	// 표준화가 가능. 
+	// 기본 틀을 인터페이스로 작성한 다음, 개발자들에게 인터페이스를 구현하도록 함.
+	// 항상 일관되게 methodB() 가 구현되어 짐으로 일관되고 정형화된 개발이 가능해짐.
+	@Override
+	public void methodB() {
+		System.out.println("methodB()");
+	}
+	
+}
+
+interface I {
+	public abstract void methodB();
+}
 
 
 
