@@ -158,6 +158,20 @@ package ch6;
  *   영향이 없도록 해야 함.
  * - 파싱 기능은 실제 파싱을 수해하지 않고, System.out.println() 을 사용해서
  *   간단하게 출력되는 기능으로 구현하면 됨.
+ *   
+ *  1. main 메소드에서 xml 파싱 기능을 사용시,
+ *     xml 파싱 버전이 변경되어 코드가 변경되더라도, main 메소드에는 영향이 없어야 함.
+ *     => 인터페이스의 반환형 다형성을 적용.
+ *     
+ *  2. main 메소드에서 xml 파싱 에서 html 파싱으로 변경이 되더라도
+ *     쉽게 파싱기능을 사용할 수 있도록 해야 함.
+ *     => 인터페이스의 반환형 다형성을 적용.
+ *     
+ *  3. 파싱 기능에 대해서는 표준화가 되도록 해야 함.
+ *     향후에 JSON 파싱 등의 다른 구문 분석에 대한 요구사항이 발생할 수 있음.
+ *     개발 팀의 멤버가 변경될 수 도 있음.
+ *   
+ *   
  * 
  * 
  * 
@@ -178,6 +192,56 @@ package ch6;
  * 
  * 
  */
+
+
+// ------------------ 파싱 기능 구현 문제 --------------------
+
+// 표준화 용도, main method 에서 쉽게 사용되도록 하는 용도.
+interface Parseable {
+	public abstract void parse(String fileName);
+}
+
+
+
+
+// 파싱 전용 클래스
+
+// 1.0 전용 XML Parser
+class XMLParser implements Parseable {
+
+	@Override
+	public void parse(String fileName) {
+		System.out.println(fileName + " : XML 구문 분석 완료.");
+	}
+	
+}
+
+// 2.0 전용 XML Parser
+// main 메소드에서 반환되는 인스턴스 1.0 될지, 2.0 이 될지 몰라도,
+// 최신의 Paser 가 사용되도록 함. => XMLParser 의 변경이 main method 에서 
+// 코드레벨로 영향이 가지 않는다는 것을 의미함. => 약결합 => 
+// => 인터페이스의 반환형 다형성
+
+class NewXMLParser implements Parseable {
+
+	@Override
+	public void parse(String fileName) {
+		System.out.println(fileName + " : XML 구문 분석 완료.");
+	}
+	
+}
+
+
+
+class HTMLParser implements Parseable {
+
+	@Override
+	public void parse(String fileName) {
+		System.out.println(fileName + " : HTML 구문 분석 완료.");
+	}
+	
+}
+
 
 
 
