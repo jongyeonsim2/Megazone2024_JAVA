@@ -46,7 +46,6 @@ package ch6;
  * 
  */
 
-
 /**
  * ############################ interface ############################
  * 
@@ -106,53 +105,39 @@ package ch6;
 /**
  * ################### 스타크래프트 Unit 구현 ######################
  * 
- * 클래스 간의 관계
- *   Unit -> GroundUnit -> Marine, SCV, Tank
- *   	  -> AirUnit -> Dropship
- *   
- *        -> Building -> Academy, Buncker, Barrack(공중), Factory(공중)
+ * 클래스 간의 관계 Unit -> GroundUnit -> Marine, SCV, Tank -> AirUnit -> Dropship
+ * 
+ * -> Building -> Academy, Buncker, Barrack(공중), Factory(공중)
  * 
  * 
- *   1. SCV 클래스 구현
- *      - 수리(다형성 적용)
- *        대상 : SCV, Tank, Dropship
- *        
- *        고려사항
- *          a. 관계가 없는 Unit 을 수리를 위해 새로운 타입으로 묶음.
- *          b. SCV 클래스에 repair(수리if 수리대상)
- *          	Unit 의 멤버변수에 접근해서 값을 수정.
- *          
- *             => 매개변수의 타입과 멤버변수 접근 타입이 다름. => 형변환
- *        
- *        
- *   2. Building 에서 공중을 띄우는 공통 능력을 interface 로 작성.
- *   
- *   
- *   3. Barrack, Factory 의 class 작성.
- *      Barrack : 마린생산
- *      Factory : tank 생산
- *      
- *      이륙, 이동, 정지, 착륙
- *      
- *      class Barrack {
- *      	이륙, 이동, 정지, 착륙 method 구현 => 코드 중복
- *      	이륙and이동 method => 향후에 신기능 구현? => 기본메소드에서 확장되는 기능.
- *      }
- *      
- *      class Factory {
- *      	이륙, 이동, 정지, 착륙 method 구현 => 코드 중복
- *      	이륙and이동 method => 향후에 신기능 구현? => 기본메소드에서 확장되는 기능.
- *      }
- *      
- *      1. 새로운 건물이 추가될 경우.
- *      2. 이륙, 이동, 정지, 착륙 의 기본 메소드의 재활용, 기능 구현의 강제성.
- *      3. 유지보수 및 확장성을 위해서.
- *      
- *   
- *   
+ * 1. SCV 클래스 구현 - 수리(다형성 적용) 대상 : SCV, Tank, Dropship
+ * 
+ * 고려사항 a. 관계가 없는 Unit 을 수리를 위해 새로운 타입으로 묶음. b. SCV 클래스에 repair(수리if 수리대상) Unit
+ * 의 멤버변수에 접근해서 값을 수정.
+ * 
+ * => 매개변수의 타입과 멤버변수 접근 타입이 다름. => 형변환
+ * 
+ * 
+ * 2. Building 에서 공중을 띄우는 공통 능력을 interface 로 작성.
+ * 
+ * 
+ * 3. Barrack, Factory 의 class 작성. Barrack : 마린생산 Factory : tank 생산
+ * 
+ * 이륙, 이동, 정지, 착륙
+ * 
+ * class Barrack { 이륙, 이동, 정지, 착륙 method 구현 => 코드 중복 이륙and이동 method => 향후에 신기능
+ * 구현? => 기본메소드에서 확장되는 기능. }
+ * 
+ * class Factory { 이륙, 이동, 정지, 착륙 method 구현 => 코드 중복 이륙and이동 method => 향후에 신기능
+ * 구현? => 기본메소드에서 확장되는 기능. }
+ * 
+ * 1. 새로운 건물이 추가될 경우. 2. 이륙, 이동, 정지, 착륙 의 기본 메소드의 재활용, 기능 구현의 강제성. 3. 유지보수 및
+ * 확장성을 위해서.
+ * 
+ * 
+ * 
  * 
  */
-
 
 public class OopEx5 {
 
@@ -199,7 +184,7 @@ public class OopEx5 {
 		scv.repair(tank);
 		
 		// 출력 결과가 100 이면 수리가 정상 완료된 것임.
-		System.out.println("수리 후 :" + tank.currentHP);
+		System.out.println("수리 후 : " + tank.currentHP);
 		
 		scv.repair(dropship);
 		scv.repair(scv);
@@ -209,19 +194,28 @@ public class OopEx5 {
 							// 수리 관계를 맺지 않는 상태로
 							// SCV 가 수리할 대상이 안됨.
 		
+		
+		// ------------- 2, 3 번 문제 동작 테스트 -------------
+		
+		// Barrack, Factory 
+		Barrak barrak = new Barrak();
+		barrak.liftOff();
+		barrak.land();
+		
+		Factory factory = new Factory();
+		factory.liftOff();
+		factory.land();
 
 	}
 
 }
 
-
 // 클래스 작성
 class Unit {
-	int currentHP;//Unit의 에너지. 부족하면 수리 받아야 함.
-	int x;			// 이동 좌표
-	int y;			// 이동 좌표
+	int currentHP;// Unit의 에너지. 부족하면 수리 받아야 함.
+	int x; // 이동 좌표
+	int y; // 이동 좌표
 }
-
 
 // interface ( 이동, 공격 )
 // Unit 의 이동 능력을 표현
@@ -238,7 +232,8 @@ interface Attackable {
 
 //interface의 상속
 //Unit 의 이동 공격 능력을 표현
-interface Fightable extends Moveable, Attackable { }
+interface Fightable extends Moveable, Attackable {
+}
 
 //-------------- 여기까지는 추상화 레벨임.( 기반 클래스, interface, 추상메소드 )
 
@@ -249,29 +244,25 @@ class Fighter extends Unit implements Fightable {
 	@Override
 	public void move(int x, int y) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void attack(Unit unit) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }
 
-
-
 // --------------------------  1 번 문제 --------------------------
 
-
-
 class Unit2 {
-	int currentHP;//Unit의 에너지. 부족하면 수리 받아야 함.
-	int x;			// 이동 좌표
-	int y;			// 이동 좌표
+	int currentHP;// Unit의 에너지. 부족하면 수리 받아야 함.
+	int x; // 이동 좌표
+	int y; // 이동 좌표
 	final int MAX_HP;
-	
-	// Unit 별로 최대 체력이 다르기 때문에, 
+
+	// Unit 별로 최대 체력이 다르기 때문에,
 	// 생성자에서 상수인 MAX_HP 를 초기화 하도록 함.
 	public Unit2(int hp) {
 		MAX_HP = hp;
@@ -290,7 +281,8 @@ class AirUnit extends Unit2 {
 	}
 }
 
-interface Repairable {}
+interface Repairable {
+}
 
 class Tank extends GroundUnit implements Repairable {
 
@@ -299,11 +291,11 @@ class Tank extends GroundUnit implements Repairable {
 		currentHP = MAX_HP; // 자기 체력이 만땅으로 초기화.
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	public String toString() {
 		return "Tank";
 	}
-	
+
 }
 
 class Dropship extends AirUnit implements Repairable {
@@ -313,7 +305,7 @@ class Dropship extends AirUnit implements Repairable {
 		currentHP = MAX_HP; // 자기 체력이 만땅으로 초기화.
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	public String toString() {
 		return "Dropship";
 	}
@@ -328,48 +320,168 @@ class Marine extends GroundUnit {
 	}
 }
 
-
 class SCV extends GroundUnit implements Repairable {
-	
+
 	// SCV 의 타입의 다른 인스턴스는 수리 대상임. => implements Repairable
 
 	public SCV() {
 		super(70);
 		currentHP = MAX_HP; // 자기 체력이 만땅으로 초기화.
 	}
-	
+
 	// 수리 메소드 구현 => 수리 대상만 수리될 수 있도록 해야 함. => Repairable 타입
 	// 참조변수인 r 의 대상 : Tank, Dropship, SCV
 	void repair(Repairable r) {
-		
-		if ( r instanceof Unit2 ) {
+
+		if (r instanceof Unit2) {
 			// 체력 인스턴스 변수에 접근하기 위해서
 			// 인스턴스 변수는 타입을 따라감으로 Unit2 로 형변환 함.
-			
+
 			// 다운캐스팅 반드시 명시적 형변환이 필요함.
-			Unit2 u = (Unit2)r;
-			
-			while(u.currentHP!=u.MAX_HP) {
+			Unit2 u = (Unit2) r;
+
+			while (u.currentHP != u.MAX_HP) {
 				u.currentHP++;
 			}
-			
-			System.out.println(u.toString() + " 의 수리가 완료됨.");
-			
-		}
-		
-	}
-	
-	
-	
-}
 
+			System.out.println(u.toString() + " 의 수리가 완료됨.");
+
+		}
+
+	}
+
+}
 
 //--------------------------  2, 3 번 문제 --------------------------
 
+/**
+ * 구현시 고려할 사항
+ * 
+ * 1. 새로운 건물이 추가될 경우. 2. 이륙, 이동, 정지, 착륙 의 기본 메소드의 재활용, 기능 구현의 강제성. 3. 유지보수 및
+ * 확장성을 위해서.
+ */
+
+class Building {
+}
+
+// 1. 이력 가능한 건물의 타입으로 사용하려는 목적.
+// 2. 이륙 가능한 건물 클래스가 새롭게 추가될 경우 
+//    이륙, 이동, 정지, 착륙 기능의 강제 구현을 시킬려고.
+interface Liftable {
+	public abstract void liftOff();
+
+	public abstract void move();
+
+	public abstract void stop();
+
+	public abstract void land();
+}
+
+// 구체화 클래스 작성 : Barrak, Factory
+// 구체화 해보면, 코드 중복성이 발견됨. => 유지보수 편하도록 해야 함.
+// 유지보수성을 높이게 하려면 어떻게 하면 좋을까?
+// 응집도 높이고, 결합도 낮추려면 어떻게 하면 좋을까?
+
+// 해결 방향
+// 1. 공통 또는 반복되는 코드는 별도로 뽑아내야 함.
+//    4가지 메소드가 한 곳에 있도록 해야함. => 응집도를 높여야 함.
+// 2. 뽑아낸 코드를 쉽게 사용할 수 있도록 해야 함.
+// 3. 뽑아낸 곳의 코드에 기능 추가, 성능 개선, 요구 사항 반영을 하더라도,
+//    사용되어지고 있는 곳에 영향이 가면 안됨. => 결합도를 낮추어야 함.
 
 
+// 응집도는 높아짐.
+class LiftableImpl implements Liftable {
 
+	// 진정한 결합도가 낮다고 볼 수는 없지만......
+	// 수정이 발생하더라도 다른 곳에 영향이 가지 않음.
+	@Override
+	public void liftOff() {
+		System.out.println("이륙");
+		System.out.println("이륙 중");
+		System.out.println("이륙 완료");
+	}
 
+	@Override
+	public void move() {
+		System.out.println("이동");
+	}
 
+	@Override
+	public void stop() {
+		System.out.println("정지");
+	}
 
+	@Override
+	public void land() {
+		System.out.println("착륙");
+	}
 
+}
+
+class Barrak extends Building implements Liftable {
+
+	// 건물의 이동과 관련된 기능의 인스턴스만 생성 후,
+	// 필요한 기능의 메소드만 호출만 하기만 하면됨. => 사용 편리성이 높아짐.
+	LiftableImpl l = new LiftableImpl();
+
+	@Override
+	public void liftOff() {
+		// TODO Auto-generated method stub
+		l.liftOff();
+	}
+
+	@Override
+	public void move() {
+		// TODO Auto-generated method stub
+		l.move();
+	}
+
+	@Override
+	public void stop() {
+		// TODO Auto-generated method stub
+		l.stop();
+	}
+
+	@Override
+	public void land() {
+		// TODO Auto-generated method stub
+		l.land();
+	}
+
+}
+
+class Factory extends Building implements Liftable {
+
+	LiftableImpl l = new LiftableImpl();
+
+	@Override
+	public void liftOff() {
+		// TODO Auto-generated method stub
+		l.liftOff();
+	}
+
+	@Override
+	public void move() {
+		// TODO Auto-generated method stub
+		l.move();
+	}
+
+	@Override
+	public void stop() {
+		// TODO Auto-generated method stub
+		l.stop();
+	}
+
+	@Override
+	public void land() {
+		// TODO Auto-generated method stub
+		l.land();
+	}
+	
+	public void liftOffAndMove() {
+		this.liftOff();
+		this.move();
+	}
+
+}
