@@ -117,8 +117,39 @@ package ch6;
  *      - 수리(다형성 적용)
  *        대상 : SCV, Tank, Dropship
  *        
+ *        고려사항
+ *          a. 관계가 없는 Unit 을 수리를 위해 새로운 타입으로 묶음.
+ *          b. SCV 클래스에 repair(수리if 수리대상)
+ *          	Unit 의 멤버변수에 접근해서 값을 수정.
+ *          
+ *             => 매개변수의 타입과 멤버변수 접근 타입이 다름. => 형변환
+ *        
+ *        
  *   2. Building 에서 공중을 띄우는 공통 능력을 interface 로 작성.
+ *   
+ *   
  *   3. Barrack, Factory 의 class 작성.
+ *      Barrack : 마린생산
+ *      Factory : tank 생산
+ *      
+ *      이륙, 이동, 정지, 착륙
+ *      
+ *      class Barrack {
+ *      	이륙, 이동, 정지, 착륙 method 구현 => 코드 중복
+ *      	이륙and이동 method => 향후에 신기능 구현? => 기본메소드에서 확장되는 기능.
+ *      }
+ *      
+ *      class Factory {
+ *      	이륙, 이동, 정지, 착륙 method 구현 => 코드 중복
+ *      	이륙and이동 method => 향후에 신기능 구현? => 기본메소드에서 확장되는 기능.
+ *      }
+ *      
+ *      1. 새로운 건물이 추가될 경우.
+ *      2. 이륙, 이동, 정지, 착륙 의 기본 메소드의 재활용, 기능 구현의 강제성.
+ *      3. 유지보수 및 확장성을 위해서.
+ *      
+ *   
+ *   
  * 
  */
 
@@ -149,6 +180,35 @@ public class OopEx5 {
 		if (f instanceof Attackable) {
 			System.out.println("Attackable 타입임.");
 		}
+		
+		
+		// ------------- 1 번 문제 동작 테스트 -------------
+		
+		Tank tank = new Tank();
+		Dropship dropship = new Dropship();
+		SCV scv = new SCV();
+		
+		Marine marine = new Marine();
+		
+		// Tank 의 수리 테스트
+		tank.currentHP = 10;
+		
+		System.out.println("수리 전 : " + tank.currentHP);
+		
+		// Tank 수리 후
+		scv.repair(tank);
+		
+		// 출력 결과가 100 이면 수리가 정상 완료된 것임.
+		System.out.println("수리 후 :" + tank.currentHP);
+		
+		scv.repair(dropship);
+		scv.repair(scv);
+		
+		//scv.repair(marine); // 컴파일 에러.( 타입이 맞지 않음. )
+							// Marine 은 Repairable 을 implements 하지 않음.
+							// 수리 관계를 맺지 않는 상태로
+							// SCV 가 수리할 대상이 안됨.
+		
 
 	}
 
@@ -200,6 +260,111 @@ class Fighter extends Unit implements Fightable {
 }
 
 
+
+// --------------------------  1 번 문제 --------------------------
+
+
+
+class Unit2 {
+	int currentHP;//Unit의 에너지. 부족하면 수리 받아야 함.
+	int x;			// 이동 좌표
+	int y;			// 이동 좌표
+	final int MAX_HP;
+	
+	// Unit 별로 최대 체력이 다르기 때문에, 
+	// 생성자에서 상수인 MAX_HP 를 초기화 하도록 함.
+	public Unit2(int hp) {
+		MAX_HP = hp;
+	}
+}
+
+class GroundUnit extends Unit2 {
+	public GroundUnit(int hp) {
+		super(hp);
+	}
+}
+
+class AirUnit extends Unit2 {
+	public AirUnit(int hp) {
+		super(hp);
+	}
+}
+
+interface Repairable {}
+
+class Tank extends GroundUnit implements Repairable {
+
+	public Tank() {
+		super(100);
+		currentHP = MAX_HP; // 자기 체력이 만땅으로 초기화.
+		// TODO Auto-generated constructor stub
+	}
+	
+	public String toString() {
+		return "Tank";
+	}
+	
+}
+
+class Dropship extends AirUnit implements Repairable {
+
+	public Dropship() {
+		super(130);
+		currentHP = MAX_HP; // 자기 체력이 만땅으로 초기화.
+		// TODO Auto-generated constructor stub
+	}
+	
+	public String toString() {
+		return "Dropship";
+	}
+}
+
+// Marine 은 medic 한테서 치료 받아야 함으로, 
+// Repairable 의 implements 대상이 아님.
+class Marine extends GroundUnit {
+	public Marine() {
+		super(20);
+		currentHP = MAX_HP; // 자기 체력이 만땅으로 초기화.
+	}
+}
+
+
+class SCV extends GroundUnit implements Repairable {
+	
+	// SCV 의 타입의 다른 인스턴스는 수리 대상임. => implements Repairable
+
+	public SCV() {
+		super(70);
+		currentHP = MAX_HP; // 자기 체력이 만땅으로 초기화.
+	}
+	
+	// 수리 메소드 구현 => 수리 대상만 수리될 수 있도록 해야 함. => Repairable 타입
+	// 참조변수인 r 의 대상 : Tank, Dropship, SCV
+	void repair(Repairable r) {
+		
+		if ( r instanceof Unit2 ) {
+			// 체력 인스턴스 변수에 접근하기 위해서
+			// 인스턴스 변수는 타입을 따라감으로 Unit2 로 형변환 함.
+			
+			// 다운캐스팅 반드시 명시적 형변환이 필요함.
+			Unit2 u = (Unit2)r;
+			
+			while(u.currentHP!=u.MAX_HP) {
+				u.currentHP++;
+			}
+			
+			System.out.println(u.toString() + " 의 수리가 완료됨.");
+			
+		}
+		
+	}
+	
+	
+	
+}
+
+
+//--------------------------  2, 3 번 문제 --------------------------
 
 
 
