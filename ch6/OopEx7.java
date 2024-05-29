@@ -74,15 +74,119 @@ package ch6;
  * 
  */
 
+// ---- 멤버 메소드, 클래스 메소드에서 멤버클래스 및 지역 클래스 접근 ----
+class Outer2 {
+	class InstanceInner {}
+	static class StaticInner {}
+	
+	// 인스턴스 멤버 변수가 인스턴스 클래스에 접근
+	// 인스턴스 멤버간에 접근
+	InstanceInner iv = new InstanceInner();
+	
+	// 스태틱 멤버 변수가 스태틱 클래스에 접근
+	static StaticInner cv = new StaticInner();
+	
+	// Outer2 의 인스턴스 메소드
+	void instanceMethod() {
+		// 특성 정리 : 인스턴스의 특성은 인스턴스와 스태틱 모두 접근 가능
+		InstanceInner obj1 = new InstanceInner();
+		StaticInner obj2 = new StaticInner();
+		//LocalInner lv;
+	}
+	
+	// Outer2 의 스태틱 메소드
+	static void staticMethod() {
+		// 특성 정리 : 스태틱은 스태틱에만 접근 가능. 스태틱은 인스턴스에 접근못함.
+		//InstanceInner obj1 = new InstanceInner();
+		StaticInner obj2 = new StaticInner();
+		//LocalInner lv;
+	}
+	
+	//LocalInner lv;
+	
+	void myMethod() {
+		// 지역 클래스
+		class LocalInner {}
+		LocalInner lv = new LocalInner();
+	}
+	
+	
+}
+
+// ---- 멤버 메소드, 클래스 메소드에서 멤버클래스 및 지역 클래스 접근 ----
+
+
+
+
+
+
+
+// ---- Outer 클래스의 인스턴스 및 스태틱 클래스의 멤버변수 사용 ----
+
+class Outer3 {
+	class InstanceInner {
+		int iv = 100;
+	}
+	static class StaticInner {
+		int iv=200;
+		static int CV=300;
+	}
+	void myMethod() {
+		class LocalInner {
+			int iv=400;
+		}
+	}
+}
+
+//---- Outer 클래스의 인스턴스 및 스태틱 클래스의 멤버변수 사용 ----
+
+
+
+
+
+
+
+
+
+//---- Outer, Inner class 에서 this 사용 ----
+class Outer4 {
+	int value = 10;
+	
+	class Inner {
+		int value = 20;
+		
+		void method1() {
+			int value = 30;
+			
+			// method1() 에서 value 변수 사용 => 3가지 케이스를 고려.
+			System.out.println("value = " + value);
+			System.out.println("this.value = " + this.value);
+			System.out.println("Outer4.this.value = " + Outer4.this.value);
+		}
+	}
+}
+
+
+//---- Outer, Inner class 에서 this 사용 ----
+
+
+
+
+
+
+
+
 
 
 public class OopEx7 {
 	
 	// 인스턴스 와 스태틱의 사용 차이점.
 	
+	// --------------- inner class의 인스턴스 생성 방법 ---------------
+	
 	class InstanceInner {
 		int iv = 100;
-		//static int cv = 100;
+		static int cv = 100;
 		final static int CONST = 100;
 	}
 	
@@ -94,14 +198,81 @@ public class OopEx7 {
 	void myMethod() {
 		class LocalInner {
 			int iv = 300;
-			//static int cv = 300;
+			static int cv = 300;
 			final static int CONST = 300;
 		}
 	}
+	
+	// --------------- inner class의 인스턴스 생성 방법 ---------------
+	
+	
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		
+		// --------------- inner class의 인스턴스 생성 방법 ---------------
+		// InstanceInner.CONST 는 inner class 의 멤버라도
+		// static 변수임으로 바로 접근이 가능
+		System.out.println(InstanceInner.CONST);
+		
+		// InstanceInner 는 인스턴스 클래스.
+		// Outer class 의 객체부터 생성해야만 접근이 가능.
+		// InstanceInner 다시 객체를 생성해야만,
+		// InstanceInner 의 멤버인 iv를 접근할 수 있음.
+		
+		OopEx7 outer = new OopEx7();
+		OopEx7.InstanceInner inner = outer.new InstanceInner();
+		
+		
+		//InstanceInner ii = new InstanceInner();
+		
+		System.out.println(inner.iv);
 
+		// --------------- inner class의 인스턴스 생성 방법 ---------------
+				
+		
+		
+		
+		
+		// ---- Outer 클래스의 인스턴스 및 스태틱 클래스의 멤버변수 사용 ----
+		// 이너클래스 사용을 위해서는 Outer 클래스의 인스턴스를 먼저 생성.
+		Outer3 oc = new Outer3();
+		Outer3.InstanceInner ii = oc.new InstanceInner();
+		
+		System.out.println("ii.iv = " + ii.iv);
+		
+		System.out.println("Outer3.StaticInner.CV = " + Outer3.StaticInner.CV);
+		
+		// static inner class 의 인스턴스 변수 사용.
+		Outer3.StaticInner si = new Outer3.StaticInner();
+		System.out.println("si.iv = " + si.iv);
+		
+		// ---- Outer 클래스의 인스턴스 및 스태틱 클래스의 멤버변수 사용 ----
+		
+		
+		
+		
+		
+		
+		
+		//---- Outer, Inner class 에서 this 사용 ----
+		Outer4 o4 = new Outer4();
+		Outer4.Inner i4 = o4.new Inner();
+		i4.method1();
+		//---- Outer, Inner class 에서 this 사용 ----
+		
+		
 	}
 
 }
