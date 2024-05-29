@@ -24,7 +24,7 @@ package ch6;
  *    - 좋은 점.
  *      실제의 개발 경험.
  *      
- *      선행 프로젝트 결과물을 새로운 웹 기술로 마이그레이션(리액터, 스프링부트, jpa 기반으로).
+ *      선행 프로젝트 결과물을 새로운 웹 기술로 마이그레이션(리액터, 스프링부트, jpa or mybatis 기반으로).
  *      
  *      최종 프로젝트에서 엄청 도움이 됨.
  *      
@@ -79,6 +79,36 @@ public class OopEx6 {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
+		Child5 c = new Child5();
+		
+		
+		// 여러 interface 간의 충돌 => 두 군데의 interface 중에 하무거나 하나를
+									// 구현하려는 클래스에 오버라이딩 하면 됨.
+									// 결과적으로 클래스에 구현된 오버라이딩 메소드가 호출됨.
+		// 결과 => method1():Child5
+		// method1() 은 두 군데의 interface에 존재하고,
+		// 그리고, Child5 class 에 구현된 상태임.
+		// 따라서, 코드 기준으로 총 3군데임.
+		c.method1();
+		
+		
+		
+		
+		
+		// 결과 : method2():Parent5
+		// 중복 상황은 클래스와 인터페이스 간의 메소드 충돌임.
+		// 결과적으로 클래스의 메소드가 호출됨.
+		c.method2();
+		
+		
+		
+		
+		// 원칙은 interface에서 추상메소드만 가능했으나,
+		// 자바 버전이 jdk1.8 부터는 interface에서도 static method 도 가능해짐.
+		MyInterface.staticMethod();
+		
+		MyInterface2.staticMethod();
+		
 	}
 
 }
@@ -87,12 +117,19 @@ public class OopEx6 {
 
 class Parent5 {
 	public void method2() { // MyInterface 와 충돌
-		
+		System.out.println("method2():Parent5");
 	}
 }
 
-class Child5 extends Parent5 {
 
+class Child5 extends Parent5 implements MyInterface, MyInterface2 {
+
+	// MyInterface, MyInterface2 에서 default method 2 개가 충돌되고 있음.
+	// 충돌되고 있는 default 메소드 중에서 아무거나 하나만 구현하면 됨.
+	@Override
+	public void method1() {
+		System.out.println("method1():Child5");
+	}
 }
 
 interface MyInterface {
