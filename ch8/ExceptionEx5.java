@@ -86,6 +86,8 @@ public class ExceptionEx5 {
 		//  
 		//  Throwable class 의 cause 인스턴스 변수에 저장.
 		//  자기 자신의 원인이 되는 예외 => 연결된 예외 라고 함.
+		
+		// 결론적으로 checked -> unchecked 로 변경됨. 컴파일 체크를 하지 않게 됨.
 		RuntimeException rte = new RuntimeException(met);
 		
 	}
