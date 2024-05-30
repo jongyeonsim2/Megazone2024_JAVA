@@ -37,7 +37,6 @@ public class ExceptionEx5 {
 			deleteTempFiles();
 		}
 		
-		
 	}
 
 	// 프로그램 설치와 관련된 메소드 작성
@@ -70,6 +69,32 @@ public class ExceptionEx5 {
 
 
 // 예외 클래스 정의
+
+// 예외 클래스 카테고리
+/**
+ * - 사용자 예외 - 100 개
+ * - 시스템 예외 - 100 개
+ * - 서비스 예외 - 100 개
+ * - 운영 예외 - 100 개
+ * 
+ * - 400개 예외에 대해서 try{} catch(){} 초반에는 엄격하게 하는게 맞을 수 있지만,
+ *   정말 안정화 되고, 운영이 잘되고 있는 상황에서, 신규개발시, 수정시
+ *   try{} catch(){} 를 하지 않아도 되도록 개발 및 유지보수 정책을 수립할 수 있음.
+ *   
+ *   RuntimeException class 를 사용하게 되면, try{} catch(){} 를 하지 않아도
+ *   되게 해줌.
+ *   
+ * - checked, unchecked 옵션
+ *   checked : 컴파일러가 검사 -> Exception 의 관계를 맺어주면 됨. -> 상속
+ *   		예외 처리를 강제 하겠다는 의미. -> 직접 예외 처리 or 위임 처리
+ *   unchecked : 컴파일러가 검사 안함 -> RuntimeException 의 관계를 맺어주면 됨. -> 상속
+ *   
+ *   
+ * 
+ * 
+ * 
+ */
+
 class SpaceException extends Exception {
 	public SpaceException(String msg) {
 		super(msg);
