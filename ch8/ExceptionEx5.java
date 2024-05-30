@@ -50,6 +50,15 @@ public class ExceptionEx5 {
 		try {
 			install();
 		} catch (InstallException e) {
+			// InstallException 에는 SpaceException or MemoryException 을
+			// 원인 예외로 가지고 있음.
+			
+			if ( e.getCause() instanceof SpaceException )
+				System.out.println("InstallException 의 원인 : SpaceException ");
+			
+			if ( e.getCause() instanceof MemoryException )
+				System.out.println("InstallException 의 원인 : MemoryException ");
+			
 			System.out.println("에러 메세지 : " + e.getMessage());
 			e.printStackTrace();
 		} finally {
@@ -63,6 +72,15 @@ public class ExceptionEx5 {
 			startInstall();
 		} catch (SpaceException se) {
 			InstallException ie = new InstallException("설치중 예외발생");
+			
+			// InstallException 의 원인 예외를 등록할 수 있음.
+			// 원인 예외를 InstallException 의 인스턴스 멤버변수로 관리하고 있으니,
+			// 연결된 예외라고 말 할 수 있음.
+			
+			// 원인 예외(cause)의 실제 소유 클래스는 Throwable 임.
+			// 즉, Throwable 클래스의 멤버변수(cause)임.
+			
+			// 모든 예외는 자신을 발생시킨 원인 예외를 가질 수 있음.
 			ie.initCause(se);
 			throw ie;
 		} catch (MemoryException me) {
