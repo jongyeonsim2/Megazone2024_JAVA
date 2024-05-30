@@ -27,8 +27,11 @@ public class ExceptionEx6 {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
+		// 실제로 발생한 Exception 은 WorkException 으로 하고,
+		// CloseException 은 억제된 예외로 두면 됨.
+		
 		try (CloseableResource cr = new CloseableResource()) {
-			cr.resourceWork(false);
+			cr.resourceWork(false); // WorkException 발생.
 		} catch(WorkException e) {
 			e.printStackTrace();
 		} catch(CloseException e) {
@@ -48,6 +51,8 @@ class CloseableResource implements AutoCloseable {
 	public void resourceWork(boolean exceptionFlag) throws WorkException {
 		System.out.println("resourceWork() 호출됨.");
 		
+		// true : if 가 조건 만족 => exception 발생.
+		// flase : if 가 조건 만족 못함 => exception 발생하지 않음.
 		if(exceptionFlag)
 			// 발생한 예외는 위임처리 => 메소드 정의부분에 thorws 하면 됨.
 			throw new WorkException("WorkException 발생!!");
