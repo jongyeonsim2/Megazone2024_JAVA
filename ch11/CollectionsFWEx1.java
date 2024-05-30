@@ -1,9 +1,13 @@
 package ch11;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 
 /**
  * 컬렉션 프레임워크(Collections Framework)
@@ -35,14 +39,32 @@ import java.util.List;
  * 
  * 				Stack
  * 					- LIFO(Last In First Out) 
+ * 					- 단방향 구조(위에서 밑으로만)
  * 
  * 				Queue
  * 					- FIFO(First In First Out)
- * 
+ * 					- 단방향 구조(위에서 밑으로만)
  * 
  * 				Deque(Double Ended Queue)
+ * 					- 양방향 구조(위 아래로 가능)
  * 					
- * 					
+ * 
+ * 				Iterator
+ * 					컬레션 프레임워크에서 컬렉션에 저장된 데이터를 읽어오는 방법을 표준화.
+ * 
+ * 					종류 : Iterator, Enumeration, ListIterator
+ * 					차이점 : Enumeration 은 Iterator 의 구버전.
+ * 							ListIterator 는 Iterator 를 상속받아서 기능을 추가적으로 구현.
+ * 
+ * 							따라서, Enumeration 은 regacy 코드의 유지를 위해서 사용.
+ * 							신규 개발에서는 ListIterator or Iterator 를 사용.
+ * 
+ * 					메소드 : hasNext(), next(), remove()
+ * 							=> for 문을 사용하지 않고도 탐색이 가능.
+ * 							=> 표준화된 개발이 가능. 재사용성, 코드의 일관성, 코드 품질
+ * 
+ * 
+ * 				Comparator, Comparable : 컬렉션의 정렬과 관련된 기능.
  * 
  * 
  * 		Set : 순서를 유지하지 않음. 중복 허용하지 않음.
@@ -101,6 +123,72 @@ public class CollectionsFWEx1 {
 		// 탐색 시간 확인
 		System.out.println("LinkedList : " + access(ll) );
 		System.out.println("ArrayList : " + access(al));
+		
+		
+		
+		//-------------------- Iterator 사용 -----------------------
+		ArrayList list2 = new ArrayList();
+		list2.add("1");
+		list2.add("2");
+		list2.add("3");
+		
+		Iterator it = list2.iterator();
+		
+		// 표준화된 데이터 탐색이 가능해짐.
+		while(it.hasNext()) {
+			Object obj = it.next();
+			System.out.println(obj);
+		}
+		
+		// ListIterator : Iterator 을 개선. 양방향 탐색이 가능.
+		ListIterator lit = list2.listIterator();
+		
+		// 순방향 탐색
+		while(lit.hasNext()) {
+			System.out.println(lit.next());
+		}
+		
+		System.out.println();
+		
+		// 역방향 탐색
+		while(lit.hasPrevious()) {
+			System.out.println(lit.previous());
+		}
+		
+		
+		//-------------------- Comparator, Comparable -----------------------
+		// 기본형 타입
+		// 우리한테 의미 있는 것은 값이 10.
+		int a = 10;
+		
+		// 참조형 타입
+		// 우리한테 의미 있는 것은 값이 10.
+		// 랩퍼 클래스 : 기본형 int 객체로 관리하고 싶은 경우 제공되는 클래스
+		Integer ii = new Integer(10);
+		
+		ii.compareTo(ii);
+		
+		// 정렬
+		String[] strArr = {"cat", "Dog", "loin", "tiger"};
+		
+		// sort() 메소드의 기본 정렬은 오름차순임.
+		// 내림차순으로 정렬하려는 경우
+		// 1. Comparator interface 를 구현 클래스 작성.
+		//    compare 메소드를 내림차순 되도록 재정의
+		// 2. Arrays 에서 제공되는 sort() 중에서
+		//	  Comparator 타입의 매개변수가 있는 메소드를 선택.
+		// 3. 구현된 Comparator 클래스를 이용해서
+		//	  sort() 메소드의 매개변수로 적용해서 사용.
+		
+		Arrays.sort(strArr);
+		System.out.println("strArr = " + Arrays.toString(strArr));
+		
+		// 내림차순 정렬
+		Arrays.sort(strArr, new Descending());
+		System.out.println("strArr = " + Arrays.toString(strArr));
+		
+		
+		
 	}
 
 	// list 에 데이터 저장.
@@ -122,3 +210,20 @@ public class CollectionsFWEx1 {
 	}
 	
 }
+
+
+// 역방향 정렬을 위한 클래스. Comparator interface 를 구현하면 됨.
+class Descending implements Comparator {
+	public int compare(Object o1, Object o2) {
+		if ( o1 instanceof Comparable && o2 instanceof Comparable )	{
+			Comparable c1 = (Comparable)o1;
+			Comparable c2 = (Comparable)o2;
+			
+			return c1.compareTo(o2) * -1;
+		}
+		
+		return -1;
+	}
+}
+
+
