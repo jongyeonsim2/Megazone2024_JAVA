@@ -4,10 +4,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * 컬렉션 프레임워크(Collections Framework)
@@ -70,6 +74,23 @@ import java.util.ListIterator;
  * 		Set : 순서를 유지하지 않음. 중복 허용하지 않음.
  * 				HashSet, TreeSet 등 
  * 
+ * 				HashSet : 저장 순서를 유지하려고 하면, LinkedHashSet 을 사용.
+ * 
+ * 
+ * 				TreeSet : 이진 검색 트리.
+ * 						정렬, 검색, 범위 검색에 높은 성능 보임.
+ * 						중복된 데이터의 저장을 허용하지 않음.
+ * 						각 노드에 최대 2개의 노드를 연결할 수 있음.
+ * 						Root 라고 하는 하나의 노드로부터 시작해서 확장.
+ * 						노드 간의 관계.(부모-자식)
+ * 
+ * 						class TreeNode {
+ * 							TreeNode left;
+ * 							Object element;
+ * 							TreeNode right;
+ * 						}
+ * 
+ * 						단점 : 노드의 추가 삭제에 시간이 걸림.
  * 
  * 		Map : 키(key)와 값(value)의 쌍으로 이루어진 데이터 집합.
  * 			순서 유지하지 않음. 키 중복 허용하지 않음. 값은 중복 허용.
@@ -187,6 +208,55 @@ public class CollectionsFWEx1 {
 		Arrays.sort(strArr, new Descending());
 		System.out.println("strArr = " + Arrays.toString(strArr));
 		
+		
+		
+		
+		
+		//---------------- HashSet ------------------------
+		Object[] objArr = {"1", new Integer(1), "2", "2", "3", "3", "4"};
+		Set set = new HashSet();
+		
+		for(int i=0; i<objArr.length; i++) {
+			set.add(objArr[i]);
+		}
+		
+		System.out.println(set);
+		
+		
+		
+		//---------------- TreeSet ------------------------
+		Set treeSet = new TreeSet();
+		
+		
+		for (int i=0; treeSet.size() < 6 ; i++) {
+			int num = (int)(Math.random()*45) + 1;
+			treeSet.add(num);
+		}
+		
+		System.out.println(treeSet);
+		
+		
+		
+		//---------------- HashMap ------------------------
+		
+		HashMap map = new HashMap();
+		map.put("myId", "1234");
+		map.put("asdf", "1111");
+		
+		String id = "myId";
+		String password = "1234";
+		
+		if(!map.containsKey(id))// id 가 존재, 존재하지 않는 경우
+		{
+			System.out.println("입력된 ID 는 존재하지 않음.");
+			//continue;
+		} else {
+			if (!(map.get(id)).equals(password)) {
+				System.out.println("비밀번호가 틀림.");
+			} else {
+				System.out.println("id 와 비밀번호가 일치.");
+			}
+		}
 		
 		
 	}
