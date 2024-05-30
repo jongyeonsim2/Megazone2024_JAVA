@@ -20,17 +20,36 @@ package ch8;
  * 
  */
 
+
+/**
+ * 연결된 예외(chained exception)
+ * 
+ * 
+* 발생한 예외를 그냥 처리하면 되는데, 왠지 복작해진 것 같은......
+* - 하나의 큰 분류의 예외로 묶어서 관리하고 싶은 경우.
+*   큰 분류의 예외로 catch 해서 처리하려고 하는데,
+*   실제로 발생한 예외를 알 수 가 없게 됨. 
+*   
+*   목적 : 추상화 또는 상속 을 통해서 다형성을 통해 관리의 편리성을 높이기 위함.
+*   	=> 반복되는 코드가 줄어들게 됨.(다형성이 적용된 매개변수, 반환타입)
+*   
+*   
+* - 상속 관계로 exception 을 정의하면 casting 가 필요해짐.
+*   파생된 exception 이 많아지게 되면, casting 의 부담이 높아지게 됨.
+* - checked 예외를 unchecked 로 변경하려고 하는 경우.
+*   new RuntimeException((new MemoryException())) => unchecked
+* 
+*/
+
+
 public class ExceptionEx5 {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
 		try {
-			startInstall();
-		} catch (SpaceException e) {
-			System.out.println("에러 메세지 : " + e.getMessage());
-			e.printStackTrace();
-		} catch (MemoryException e) {
+			install();
+		} catch (InstallException e) {
 			System.out.println("에러 메세지 : " + e.getMessage());
 			e.printStackTrace();
 		} finally {
@@ -39,8 +58,24 @@ public class ExceptionEx5 {
 		
 	}
 
+	static void install() throws InstallException {
+		try {
+			startInstall();
+		} catch (SpaceException se) {
+			InstallException ie = new InstallException("설치중 예외발생");
+			ie.initCause(se);
+			throw ie;
+		} catch (MemoryException me) {
+			InstallException ie = new InstallException("설치중 예외발생");
+			ie.initCause(me);
+			throw ie;
+		} 
+		
+	}
+	
+	
 	// 프로그램 설치와 관련된 메소드 작성
-	static void startInstall() throws SpaceException {
+	static void startInstall() throws SpaceException, MemoryException {
 		if(!enoughSpace())
 			throw new SpaceException("설치 실패 : 설치공간 부족");
 		
@@ -95,13 +130,24 @@ public class ExceptionEx5 {
  * 
  */
 
+
+// 설치 예외
+class InstallException extends Exception {
+	public InstallException(String msg) {
+		super(msg);
+	}
+}
+
+
+// 설치 예외의 원인 예외(디스크 용량)
 class SpaceException extends Exception {
 	public SpaceException(String msg) {
 		super(msg);
 	}
 }
 
-class MemoryException extends RuntimeException {
+//설치 예외의 원인 예외(메모리 용량)
+class MemoryException extends Exception {
 	public MemoryException(String msg) {
 		super(msg);
 	}
