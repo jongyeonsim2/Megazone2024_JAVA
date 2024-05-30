@@ -25,6 +25,10 @@ package ch8;
  * 연결된 예외(chained exception)
  * 
  * 
+ * 큰 분류로 묶어서 관리하는 경우, checked 예외를 unchecked 로 변경하는 경우를
+ * 주로 사용 가능성이 높음.
+ * 
+ * 
 * 발생한 예외를 그냥 처리하면 되는데, 왠지 복작해진 것 같은......
 * - 하나의 큰 분류의 예외로 묶어서 관리하고 싶은 경우.
 *   큰 분류의 예외로 catch 해서 처리하려고 하는데,
@@ -36,6 +40,9 @@ package ch8;
 *   
 * - 상속 관계로 exception 을 정의하면 casting 가 필요해짐.
 *   파생된 exception 이 많아지게 되면, casting 의 부담이 높아지게 됨.
+*   
+*   casting 대신에 initCause(), getCause()
+*   
 * - checked 예외를 unchecked 로 변경하려고 하는 경우.
 *   new RuntimeException((new MemoryException())) => unchecked
 * 
@@ -64,6 +71,22 @@ public class ExceptionEx5 {
 		} finally {
 			deleteTempFiles();
 		}
+		
+		// checked 예외를 unchecked 로 변경하려고 하는 경우
+		// Exception -> RuntimeException 로 형변환 처럼 되는것 같지만,
+		// 실제는 연결된 예외임.
+		MemoryException met = new MemoryException("unchecked 예외 용");
+		
+		// Exception -> RuntimeException 로 변경됨.
+		// 하지만, 실제로는 연결된 예외임.
+		// RuntimeException(met)
+		//  -> super((Throwable)met) -> Exception((Throwable)met) ->
+		//  -> super((Throwable)met) -> Throwable((Throwable)met) ->
+		//  this.cause = (Throwable)met;
+		//  
+		//  Throwable class 의 cause 인스턴스 변수에 저장.
+		//  자기 자신의 원인이 되는 예외 => 연결된 예외 라고 함.
+		RuntimeException rte = new RuntimeException(met);
 		
 	}
 
