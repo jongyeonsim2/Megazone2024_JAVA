@@ -78,6 +78,10 @@ import java.util.List;
  * 
  * 
  * 
+ * 지네릭스란?
+ * 인스턴스별로 원하는 타입을 지정해서 사용하니까,
+ * 지네릭스는 인스턴스 별로 다르게 동작되도록 만들려고 하는 자바의 기능임.
+ * 
  */
 
 public class GenericsEx1 {
@@ -98,6 +102,37 @@ public class GenericsEx1 {
 		// - Apple Box 에 담을 수 있는 대상 : Apple
 		// - Grape Box 에 담을 수 있는 대상 : Grape
 		
+		// 과일 전용 박스
+		Box<Fruit> fruitBox = new Box<Fruit>();
+		
+		// 사과 전용
+		Box<Apple> appleBox = new Box<Apple>();
+		
+		// Grape 전용
+		Box<Grape> grapeBox = new Box<Grape>();
+		
+		// Toy 전용
+		Box<Toy> toyBox = new Box<Toy>();
+		
+		// 원하지 않는 타입이 저장되지 않도록 타입체크를 해서 알려줌.
+		//Box<Fruit> fruitBox2 = new Box<Apple>();
+		//Box<Toy> toyBox2 = new Box<Apple>();
+		
+		// add() Fruit 타입으로 다형성 매개 변수로 적용이됨.
+		fruitBox.add(new Fruit());
+		fruitBox.add(new Apple());
+		fruitBox.add(new Grape());
+		
+		// 매개변수의 타입이 Fruit임. Toy class 와 전혀 관계가 없음.
+		//fruitBox.add(new Toy());
+		
+		appleBox.add(new Apple());
+		//appleBox.add(new Grape());
+		//appleBox.add(new Fruit());
+		//appleBox.add(new Toy());
+		
+		System.out.println(fruitBox);
+		System.out.println(appleBox);
 		
 		
 		
