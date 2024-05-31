@@ -4,6 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * java.lang.UnsupportedOperationException
+ * 
+ * 이 클래스는 구현되지 않은 메소드나 메소드가 호출되지 않는 경우 라고 생각하면 됨.
+ * 
+ * 메소드를 직접 구현하거나 다른 메소드로 대체할 수 있는지 확인해서 예외를 해결.
+ * 
+ */
+
+
+
+/**
  * 지네릭스( Generics )
  * 
  * 다양한 타입의 객체들을 다루는 메소드나 컬렉션 클래스에 컴파일 시의 타입 체크를 해주는 기능.
@@ -74,10 +85,44 @@ public class GenericsEx1 {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		List arrList = new ArrayList();
+		//List arrList = new ArrayList();
+		
+		// Box class
+		
+		// Box 에 담을 수 있는 타입 :
+		// Fruit - Apple
+		// Fruit - Grape
+		
+		// Box 에 담을 수 있는 타입 지정 : Fruit Box, Apple Box, Grape Box
+		// - Fruit Box 에 담을 수 있는 대상 : Fruit, Apple, Grape
+		// - Apple Box 에 담을 수 있는 대상 : Apple
+		// - Grape Box 에 담을 수 있는 대상 : Grape
+		
+		
 		
 		
 		
 	}
 
 }
+
+// Box class => 지네릭 클래스
+class Box<T> {
+	ArrayList<T> list = new ArrayList<T>();
+	void add(T item) { list.add(item); }
+	T get(int i) { return list.get(i); }
+	
+	int size() { return list.size(); }
+	public String toString() { return list.toString(); }
+}
+
+// 과일 클래스들
+class Fruit { public String toString() { return "Fruit"; } }
+
+class Apple extends Fruit { public String toString() { return "Apple"; } }
+class Grape extends Fruit { public String toString() { return "Grape"; } }
+
+class Toy { public String toString() { return "Toy"; } }
+
+
+
