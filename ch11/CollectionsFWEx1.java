@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -69,6 +70,7 @@ import java.util.TreeSet;
  * 
  * 
  * 				Comparator, Comparable : 컬렉션의 정렬과 관련된 기능.
+ * 					현재 기본 정렬 오름차순으로 되어 있음.
  * 
  * 
  * 		Set : 순서를 유지하지 않음. 중복 허용하지 않음.
@@ -131,10 +133,26 @@ public class CollectionsFWEx1 {
 		
 		
 		
-		// LinkedList
+		// LinkedList // 데이터가 노드 구조로 연결됨. => 다음 데이터 탐색시 참조해서 이동.
 		LinkedList ll = new LinkedList();
 		
-		// 탐색 속도 비교 대상
+		// 탐색 속도 비교 대상 // 데이터의 시작과 끝 사이까지 전부 데이터
+							//	다음 데이터 탐색시 참조해서 이동과 같은 탐색 작업이 없음.
+							//  
+							// 배열 단점 : 크기가 고정. 저장 공간의 확장성이 없음.
+							// 
+							// 그래서, 배열의 단점을 개선한 ArrayList 는
+							// 저장 공간의 확장이 자유로움.
+							// 
+							// 단점 : 기존의 배열에 공간이 없으면,
+							//		새로운 배열을 생성 후 기존 배열의 데이터를 복사
+							// 
+							// 고려사항
+							//        저장된 대상의 데이터가 작으면 괜찮음.
+							//		대량의 데이터의 경우는 고려해야 함.
+							// 
+							// 데이터 수정, 추가, 삭제 시 발생하는 성능과 관련해서 확장해서 물어볼 수 있음.
+		
 		ArrayList al = new ArrayList(100000);
 		
 		// list 에 데이터 저장
@@ -238,7 +256,7 @@ public class CollectionsFWEx1 {
 		
 		
 		//---------------- HashMap ------------------------
-		
+		// HashMap을 사용한 데이터 탐색
 		HashMap map = new HashMap();
 		map.put("myId", "1234");
 		map.put("asdf", "1111");
@@ -256,7 +274,39 @@ public class CollectionsFWEx1 {
 			} else {
 				System.out.println("id 와 비밀번호가 일치.");
 			}
+		}	
+		
+		
+		
+		// HashMap에서 Iterator 사용.
+		HashMap map2 = new HashMap();
+		map2.put("김자바", 90); // 90 정수 상수 -> Object
+								// 형변환 : 작은 -> 큰것 (자동형변환)
+								// 90 -> Integer
+								// Integer : int 도 객체로 사용하고 싶은 경우.
+								// Integer 도 클래스이기 때문에, 
+								// 자동으로 Object 를 상속 받게 됨.
+		map2.put("이자바", 99);
+		map2.put("박자바", 70);
+		map2.put("홍자바", 60);
+		map2.put("안자바", 100);
+		
+		// iterator 사용하기 위해서
+		// 1. set
+		// 2. set에서 iterator
+		Set set2 = map2.entrySet();
+		Iterator it2 = set2.iterator();
+		
+		while(it2.hasNext()) {
+			// map에서 key, value 를 함께 사용하기 위한 타입 : Entry
+			Map.Entry entry = (Map.Entry)it2.next();
+			System.out.println("이름 : " + entry.getKey() + 
+					", 점수 : " + entry.getValue());
 		}
+		
+		
+		
+		
 		
 		
 	}
