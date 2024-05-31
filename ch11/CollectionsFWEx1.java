@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -12,6 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -108,7 +110,10 @@ import java.util.TreeSet;
  * 					데이터 저장 형태가 이진 구조(왼쪽, 오른쪽)로 저장.
  * 					이진 탐색으로 진행. 검색 성능이 좋음.
  * 
- * 
+ * 				- Properties
+ * 					key, value 가 String 임.
+ * 					Iterator 가 Enumeration 임.
+ * 					
  * 
  * 
  * 
@@ -446,6 +451,21 @@ public class CollectionsFWEx1 {
 			Map.Entry entry = (Map.Entry)it3.next();
 			System.out.println(entry.getKey() + " : " + entry.getValue());
 		}
+		
+		// Properties
+		Properties prop = new Properties();
+		
+		prop.setProperty("size", "10");
+		prop.setProperty("capacity", "20");
+		prop.setProperty("timeout", "30");
+		
+		Enumeration e = prop.propertyNames();
+		
+		while(e.hasMoreElements()) {
+			String element = (String)e.nextElement();
+			System.out.println(element + " - " + prop.getProperty(element));
+		}
+		
 	}
 
 	// list 에 데이터 저장.
