@@ -145,6 +145,7 @@ public class GenericsEx2 {
 		// 파생 클래스 타입으로 지정했으므로, 
 		// 정확하게는 다형성을 활용하고 있지 못하는 상태임.
 		appleBox.add(new Apple2());
+		appleBox.add(new Apple2());
 		//appleBox.add(new Fruit2());
 		//appleBox.add(new Grape2());
 		
@@ -200,7 +201,7 @@ public class GenericsEx2 {
 			// eat_String() 메소드는 Fruit 가 가지고 있음.
 			// 그래서, Fruit2 로 다운캐스팅 해야함. 
 			//   => 제네릭에서 형변환 필요 없는 것이 장점이라고 했지만, 케이스 바이 케이스임.
-			
+					
 			//((Fruit2)it.next()).eat_String();
 			// 현재 interface에 구현된 쪽은 기반 클래스만 되어 있음.
 			// 자식의 eat_String() 를 해도 기반쪽의 메소드가 호출됨.
@@ -221,6 +222,7 @@ public class GenericsEx2 {
 		 * 
 		 */
 		System.out.println(Juicer.makeJuice(fruitBox));
+		//System.out.println(Juicer.makeJuice(appleBox));
 		
 	}//end if main()
 
