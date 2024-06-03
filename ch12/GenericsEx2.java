@@ -92,6 +92,9 @@ public class GenericsEx2 {
 		
 		/**
 		 * 1. 클래스 관계에 대한 제한 실습 코드
+		 * 
+		 * 제네릭에 다형성이 적용되었다는 점을 생각하면서,
+		 * 실습을 진행하면 좋음.
 		 */
 		
 		// 제네릭에 다형성이 적용되었다는 점을 고려함.
@@ -152,6 +155,18 @@ public class GenericsEx2 {
 		
 		/**
 		 * 2. 인터페이스 구현에 대한 제한 관련 코드
+		 * 
+		 * 2.1 Eatable 을 기반쪽에 구현하지 않은 경우.
+		 * 		모두 에러
+		 * 2.2 Eatable 을 파생쪽에만 구현한 경우.
+		 * 		기반만 에러
+		 * 2.3 Eatable 을 기반쪽에 구현한 경우.
+		 * 		모두 정상
+		 * 
+		 * 
+		 * 
+		 * 2.4 
+		 * 
 		 */
 		
 	}
@@ -171,11 +186,15 @@ class Box2<T> {
 
 // 과일 Box : 클래스 간의 관계 제한 => 제네릭을 활용.
 class FruitBox2<T extends Fruit2 & Eatable> extends Box2<T> {}
-
+//  Fruit2 또는 파생 클래스는 반드시 Eatable 을 구현해야 함.
+//  Fruit2 에서 implements Eatable 를 작성하지 않으면, 컴파일 에러가 발생.
+//     => 강제 구현시키고 있다는 것임. 
 
 // 제네릭 제한용 인터페이스
 interface Eatable {
 	abstract void eat();
+	
+	abstract String eat_String();
 }
 
 
@@ -187,6 +206,11 @@ class Fruit2 implements Eatable {
 	public void eat() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public String eat_String() {
+		return "과일 먹기";
 	}
 }
 
