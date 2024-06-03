@@ -169,6 +169,20 @@ public class GenericsEx2 {
 		 * 
 		 */
 		
+		
+		/**
+		 * 구현해보세요~~~~
+		 * 
+		 * 1. 프로그램에서 사용중인 Collection 에서 Iterator 구하기
+		 * 2. 표준 api 이용해서 오버라이딩된 toString() 을 사용.
+		 * 3. Fruit2 기반 클래스의 interface 를 구현한
+		 * 		eat_String() 를 사용 해보세요.
+		 *  
+		 * 4. 3번이 왜 안되는지 생각해보기.
+		 *    왜 안되는지를 OOP 4대 특성과 연결지어서 생각해 볼 것.  
+		 */
+		
+		
 	}
 
 }
