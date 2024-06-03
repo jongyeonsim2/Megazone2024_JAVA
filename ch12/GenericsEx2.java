@@ -1,6 +1,7 @@
 package ch12;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * 제한된 지네릭 클래스  => 지넥릭에 다형성 적용
@@ -179,11 +180,49 @@ public class GenericsEx2 {
 		 * 		eat_String() 를 사용 해보세요.
 		 *  
 		 * 4. 3번이 왜 안되는지 생각해보기.
-		 *    왜 안되는지를 OOP 4대 특성과 연결지어서 생각해 볼 것.  
+		 *    왜 안되는지를 OOP 4대 특성과 연결지어서 생각해 볼 것. 
+		 *    
+		 *    형변환 생략을 해서 할 수 없음. 다운캐스팅을 직접 해줘야 함.
 		 */
 		
+		// 1.
+		Iterator it = fruitBox.list.iterator();
 		
-	}
+		// 2.
+		while(it.hasNext()) {
+			// 3.
+			System.out.println(it.next().toString());
+			// Object <- Fruit2 <- Apple
+			// Object 오버라이딩 된 파생클래스의 메소드를 호출
+			
+			// 4. it.next()
+			//it.next().eat_String();//
+			// eat_String() 메소드는 Fruit 가 가지고 있음.
+			// 그래서, Fruit2 로 다운캐스팅 해야함. 
+			//   => 제네릭에서 형변환 필요 없는 것이 장점이라고 했지만, 케이스 바이 케이스임.
+			
+			//((Fruit2)it.next()).eat_String();
+			// 현재 interface에 구현된 쪽은 기반 클래스만 되어 있음.
+			// 자식의 eat_String() 를 해도 기반쪽의 메소드가 호출됨.
+			
+			// 만약에 파생클래스 쪽에 eat_String() 모두 구현하면은?
+			// => 파생의 메소드 접근은 인스턴스 타입을 따라 감으로
+			//    다운 캐스팅이 필요해진다는 걸 알게 됨.
+			
+			// instanceOf Apple 로 형변환 가능한지, Grape로 형변환 가능한지 확인 후
+			// 다시 다운 캐스팅을 해야 함.
+			
+		}
+		
+		
+		/**
+		 * Juicer class로 Juice 만들기
+		 * 
+		 * 
+		 */
+		System.out.println(Juicer.makeJuice(fruitBox));
+		
+	}//end if main()
 
 }
 
@@ -193,6 +232,7 @@ class Box2<T> {
 	ArrayList<T> list = new ArrayList<T>();
 	void add(T item) { list.add(item); }
 	T get(int i) { return list.get(i); }
+	ArrayList<T> getList() { return list; }
 	
 	int size() { return list.size(); }
 	public String toString() { return list.toString(); }
@@ -214,6 +254,7 @@ interface Eatable {
 
 // Fruit 의 공통 기능(추상 메소드)을 강제 구현 => 제네릭을 활용
 class Fruit2 implements Eatable {
+	//Object 의 toString() 을 오버라이딩한 메소드임.
 	public String toString() { return "Fruit2"; }
 
 	@Override
@@ -231,15 +272,93 @@ class Fruit2 implements Eatable {
 // Fruit 의 파생 클래스
 class Apple2 extends Fruit2 {
 	public String toString() { return "Apple2"; }
+	
+	@Override
+	public String eat_String() {
+		return "Apple 먹기";
+	}
 }
 
 class Grape2 extends Fruit2 {
 	public String toString() { return "Grape2"; }
+	
+	@Override
+	public String eat_String() {
+		return "Grape 먹기";
+	}
 }
 
 class Toy2 {
 	public String toString() { return "Toy2"; }
 }
+
+
+// FruitBox 를 이용한 쥬스를 만드는 클래스
+/**
+ * FruitBox 의 종류 : FruitBox(Apple, Grape), 
+ * 					AppleBox(Apple 전용), 
+ * 					GrapeBox(Grape 전용)
+ * 
+ * 
+ * 
+ */
+
+class Juicer {
+	/*
+
+	// 컴파일 전
+	static Juicer makeJuice(FruitBox<Fruit> box) {
+		// 작업 후 Juice 를 반환하면 됨.
+	}
+	
+	static Juicer makeJuice(FruitBox<Apple> box) {
+		// 작업 후 Juice 를 반환하면 됨.
+	}
+	
+	static Juicer makeJuice(FruitBox<Grape> box) {
+		// 작업 후 Juice 를 반환하면 됨.
+	}
+	
+	
+	// 컴파일 후 => 메소드 중복 정의가 발생하게 됨.
+	static Juicer makeJuice(FruitBox box) {
+		// 작업 후 Juice 를 반환하면 됨.
+	}
+	
+	static Juicer makeJuice(FruitBox box) {
+		// 작업 후 Juice 를 반환하면 됨.
+	}
+	
+	static Juicer makeJuice(FruitBox box) {
+		// 작업 후 Juice 를 반환하면 됨.
+	}
+	*/
+	
+	
+	// 와일드 카드를 적용. => 메소드의 중복 선언을 막기 위한 용도로 사용.
+	// 메소드 중복의 해결 방법은 기반 타입으로 매개변수 타입이 되도록 하는 것임.
+	// <? super T> : 하한 제한. T와 그 기반(조상)들만 가능. <= 사용된 와일드 카드
+	// <? extends T> : 상한 제한. T 와 그 파생(자식)들만 가능. 
+	// <?> : 제한이 없음. 모든 타입이 가능. <? extends Object>
+	public static Juice makeJuice(FruitBox2<? super Fruit2> box) {
+		// 작업 후 Juice 를 반환하면 됨.
+		String tmp = "";
+		
+		for(Fruit2 f : box.getList())
+			tmp += f + " ";
+		
+		return new Juice(tmp);
+	}
+	
+}
+
+class Juice {
+	String name;
+	
+	Juice(String name) {this.name = name + " Juice";}
+	public String toString() {return name;}
+}
+
 
 
 
