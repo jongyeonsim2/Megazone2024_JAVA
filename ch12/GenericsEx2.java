@@ -88,7 +88,72 @@ public class GenericsEx2 {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		
+		
+		/**
+		 * 1. 클래스 관계에 대한 제한 실습 코드
+		 */
+		
+		// 제네릭에 다형성이 적용되었다는 점을 고려함.
+		// FruitBox2 에는 Apple, Grape 를 담을 수 있음.
+		FruitBox2<Fruit2> fruitBox = new FruitBox2<Fruit2>();
 
+		/**
+		 *컴파일 전
+		 * ArrayList<T> list = new ArrayList<T>();
+		 * 
+		 * 컴파일 후 => Apple, Grape 도 담을 수 있게 됨.
+		 * ArrayList<Fruit2> list = new ArrayList<Fruit2>();
+		 * 
+		 */
+		
+		
+		// Apple2 Box
+		FruitBox2<Apple2> appleBox = new FruitBox2<Apple2>();
+		/**
+		 *컴파일 전
+		 * ArrayList<T> list = new ArrayList<T>();
+		 * 
+		 * 컴파일 후 => Apple 만 담을 수 있게 됨. => 다형성이 적용 되지 않음.
+		 * => ArrayList 에 저장할 수 있는 타입은 파생 클래스 타입.
+		 * - Fruit를 담을 수 없고, Grape와 Apple 은 서로 관계가 없음.
+		 * => 그래서, ArrayList 에는 Apple 만 담을 수 있음.
+		 * ArrayList<Apple2> list = new ArrayList<Apple2>();
+		 * 
+		 */
+		
+		
+		// Grape2 Box
+		
+		
+		// 제네릭 제한이 다형성으로 적용되도록 했으므로,
+		// 과일을 담을 때, 다형성이 적용되도록 담아야 함.
+		// 각 Box 에 과일 담기
+		fruitBox.add(new Fruit2());
+		
+		// 지네릭 제한 => 다형성 적용된 것을 확인
+		fruitBox.add(new Apple2());
+		fruitBox.add(new Grape2());
+		
+		// Apple 만 담을 수 있는 Box
+		// 제네릭 클래스에서는 다형성을 적용 해지만,
+		// 실제 T 에 대한 타입이 기반 클래스 타입이 아닌,
+		// 파생 클래스 타입으로 지정했으므로, 
+		// 정확하게는 다형성을 활용하고 있지 못하는 상태임.
+		appleBox.add(new Apple2());
+		//appleBox.add(new Fruit2());
+		//appleBox.add(new Grape2());
+		
+		
+		
+		
+		System.out.println("fruitBox - " + fruitBox);
+		
+		
+		/**
+		 * 2. 인터페이스 구현에 대한 제한 관련 코드
+		 */
+		
 	}
 
 }
@@ -135,7 +200,7 @@ class Grape2 extends Fruit2 {
 }
 
 class Toy2 {
-	
+	public String toString() { return "Toy2"; }
 }
 
 
