@@ -33,12 +33,46 @@ package ch12;
  * 
  */
 
+// 기반 클래스
+class EnumBase {
+	// 순서 정보에 활용되는 정보.
+	static int id = 0;
+	
+	// enum 의 내부 순서 정보
+	int ordinal;
+	// 상수명
+	String name = "";		
+	
+	EnumBase(String name) {
+		this.name = name;
+		ordinal = id++;
+	}
+	
+	public int ordinal() { return ordinal; }
+	
+}
+
+// EnumBase 를 바탕으로 필요한 사용될 Enum 파생 클래스
+class TransportationEnum extends EnumBase {
+	
+	final int BASIC_FARE;
+	
+	// 생성자는 private 로 해야함. 내부 전용.
+	private TransportationEnum(String name, int basicFare) {
+		super(name);
+		BASIC_FARE = basicFare;
+	}
+	
+	public String name() { return name; }
+	
+}
 
 public class EnumEx4 {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-
+		//TransportationEnum t1 = TransportationEnum.BUS;
+		//TransportationEnum.BUS.fare(100);
 	}
 
 }
