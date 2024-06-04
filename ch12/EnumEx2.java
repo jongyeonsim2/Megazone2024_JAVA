@@ -25,7 +25,12 @@ enum Direction3 {
 		this.symbol = symbol;
 	}
 	
+	// 상수값 게터
+	
 	public String getSymbol() { return symbol; }
+	
+	// 정수(위치정보) 매개변수를 받아서 해당 상수를 반환하는 메소드
+	
 	
 	public String toString() {
 		return name() + " " + getSymbol();
@@ -39,6 +44,15 @@ public class EnumEx2 {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
+		for(Direction3 d : Direction3.values())
+			System.out.printf("%s=%s%n", d.name(), d.getSymbol());
+		
+		// 위치정보를 사용해서 상수를 반환하는 메소드 사용
+		
+		// 상수명, 상수값, 심볼 정보를 출력
+		
+		
+		
 	}
 
 }
