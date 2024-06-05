@@ -88,7 +88,7 @@ package ch14;
  *      - 데이터 소스가 기본형 배열
  *        IntStream IntStream.of(int... values)
  *        IntStream IntStream.of(int[])
- *        IntStream Arrays.of(int[])
+ *        IntStream Arrays.stream(int[])
  * 
  * 	 3. 파일
  *      - Stream 대상에 대한 종류

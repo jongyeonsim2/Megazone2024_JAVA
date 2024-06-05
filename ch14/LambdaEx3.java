@@ -28,7 +28,7 @@ package ch14;
  * BiFunction<String, String, Boolean> f 
  * 								= (s1, s2) -> s1.equals(s2);
  * - 메소드 참조 형태
- * BiFunction<String, String, Boolean> f = s1::equal;
+ * BiFunction<String, String, Boolean> f = String::equals;
  * 
  * 
  * 
