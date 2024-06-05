@@ -259,12 +259,58 @@ package ch14;
  * 
  */
 
+// 함수형 인터페이스
+@FunctionalInterface
+interface MyFunction {
+	public abstract void run(); //추상 메소드
+}
+
 
 public class LambdaEx1 {
+	
+	//함수형 인터페이스를 매개변수로 활용하는 메소드
+	static void exectue(MyFunction f) {
+		f.run();
+	}
+	
+	//함수형 인터페이스를 반환형으로 하는 메소드
+	static MyFunction getMyFunction() {
+		MyFunction f = () -> System.out.println("f3.run()");
+		return f;
+	}
+	
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-
+		
+		// 1. case1 : 함수형 인터페이스로 람다식 선언.
+		MyFunction f1 = () -> System.out.println("f1.run()");
+		
+		
+		// 2. case2 : 익명클래스 형태의 함수형 인터페이스 구현
+		MyFunction f2 = new MyFunction() {
+			// 함수형 인터페이스의 추상 메소드를 구현.
+			@Override
+			public void run() {
+				System.out.println("f2.run()");
+			}
+		};
+		
+		
+		// 3. case3 : getMyFunction() 를 사용.
+		MyFunction f3 = getMyFunction();
+		
+		
+		// 4. case4 : 매개변수 메소드인 exectue() 를 사용.
+		//    case4.1. 함수형 인터페이스를 매개변수로 전달
+		exectue(f1);
+		
+		//    case4.2. 함수형 인터페이스 없이 직접 람다식으로 전달.
+		exectue( () -> System.out.println("run()") );
+		
+		f1.run();
+		f2.run();
+		f3.run();
 	}
 
 }
