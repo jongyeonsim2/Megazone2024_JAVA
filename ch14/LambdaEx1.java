@@ -80,29 +80,148 @@ package ch14;
  *   추론이 가능함으로 대부분 생략이 됨.
  *   
  *   
- * 
+ *   - 기존 메소드 형태
  *   int max(int a, int b) {
  *   	return a > b ? a : b;
  *   }
  *   
+ *   - 람다식 형태
+ *   (int a, int b) -> { return a > b ? a : b; } //return 문
+ *   (int a, int b) -> a > b ? a : b  //3항식임으로 식임. ";" 을 제거.
+ *   (a, b) -> a > b ? a : b
  *   
+ *   
+ *   
+ *   - 기존 메소드 형태
  *   void printVar(String name, int i) {
  *   	System.out.println(name + "=" + i);
  *   }
  *   
+ *   - 람다식 형태
+ *   (String name, int i) -> { System.out.println(name + "=" + i); }
+ *   (name, i) -> { System.out.println(name + "=" + i); }
+ *   (name, i) -> System.out.println(name + "=" + i)
  *   
  *   
+ *   
+ *   
+ *   - 기존 메소드 형태
  *   int square(int x) {
  *   	return x * x;
  *   }
  *   
+ *   - 람다식 형태
+ *   (int x) -> { return x * x; }
+ *   (x) -> x * x
+ *   x -> x * x
  *   
  *   
+ *   
+ *   - 기존 메소드 형태
  *   int roll() {
  *   	return (int)(Math.random() * 6);
  *   }
  *   
+ *   - 람다식 형태
+ *   () -> { return (int)(Math.random() * 6); }
+ *   () -> (int)(Math.random() * 6)
  *   
+ *   
+ *   
+ *   
+ *   - 기존 메소드 형태
+ *   int sumArr(int[] arr) {
+ *   	int sum = 0;
+ *   	for(int i : arr)
+ *   		sum += i;
+ *   	return sum;
+ *   }
+ *   
+ *   - 람다식 형태
+ *   (int[] arr) -> {
+ *   					int sum = 0;
+ *   					for(int i : arr)
+ *   						sum += i;
+ *   					return sum;
+ *   				}
+ *   
+ *   
+ *   
+ *   
+ *   - 함수형 인터페이스
+ *   	
+ *   	함수를 어떤 메소드의 매개변수로 활용하고 싶음.
+ *   	매개변수에는 타입이 있음. 함수를 나타내는 타입의 필요성이 나옴.
+ *   
+ *   	타입 f = (a, b) -> a > b ? a : b;
+ *   
+ *   	람다식을 메소드라고 생각하고, 람다식을 호출해서 사용하려고 한다면,
+ *      기존에는 객체를 생성해서 메소드 접근해서 사용함.
+ *      
+ *      위의 람다식 어떤 타입의 변수에 저장되려면, 
+ *      람다식은 눈에는 보이지 않지만, 지금 람다식이 익명클래스 안에 있는것 아닌지?
+ *      
+ *      
+ *      (a, b) -> a > b ? a : b
+ *      
+ *      
+ *      new Object() {  // 익명 클래스
+ *      	int (int a, int b) {
+ *      		return a > b ? a : b;
+ *      	}
+ *      }
+ *      
+ *      
+ *      타입 f = (a, b) -> a > b ? a : b;
+ *      MyFunction f = (a, b) -> a > b ? a : b;
+ *   
+ *   
+ *   	위 f를 나타내는 타입이 현재 배운 범위에서 적용 가능한게 무엇인지 ?
+ *   	기본형은 아니고, 참조형이 되는게 논리적으로 맞음.
+ *   
+ *   	참조형중에서 어떤것으로 타입으로 하면 될까 ? 인터페이스 형태로 하면 됨.
+ *   
+ *   	@FunctionalInterface
+ *   	interface MyFunction {
+ *   		public abstract int max(int a, int b);
+ *   	}
+ *   
+ *   	
+ *   	MyFunction f = new MyFunction() {  // 인터페이스를 구현한 익명 클래스.
+ *   						// MyFunction 인터페이스의 
+ *   						// 추상메소드 max 를 구현.
+ *   						public int max(int a, int b) {
+ *   							return (a, b) -> a > b ? a : b;
+ *   						}
+ *   					};
+ * 
+ * 
+ * 		int big = f.max(3, 5);// 익명 객체의 메소드 호출
+ * 
+ * 
+ * 
+ * 
+ * 		결론,
+ * 
+ * 		MyFunction f = (a, b) -> a > b ? a : b;
+ * 		int big = f.max(3, 5);
+ * 
+ * 		람다식을 어떤 메소의 매개변수로 전달이 가능해짐.
+ * 
+ * 		MyFunction 인터페이스는 람다식을 다루기 위한 인터페이스가 되고,
+ *      이를 "함수형 인터페이스" 라고 함.
+ *      
+ *      
+ *      함수형 인터페이스의 제약
+ *      함수형 인터페이스에는 오직 하나의 추상 메소드만 정의되어 있어야 함.
+ *      그래야만, 람다식과 인터페이스가 1:1로 연결이 되기 때문임.
+ *      
+ *      하지만, static 메소드, default 메소드의 개수에는 제약이 없음.
+ *      
+ *      @FunctionalInterface 를 사용하면 함수형 인터페이스가 올바르게
+ *      정의가 되었는지를 확인이 가능해짐.
+ * 
+ * 
  * 
  */
 
