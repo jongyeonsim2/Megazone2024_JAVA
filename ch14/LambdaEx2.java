@@ -1,5 +1,13 @@
 package ch14;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
+
 /**
  * 
  * 함수형 인터페이스 의 JAVA API
@@ -73,7 +81,53 @@ public class LambdaEx2 {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		
+		
+		// 데이터 소스(ArrayList) => Collection( List, Set, Map )
+		ArrayList<Integer> list = new ArrayList<>();
+		
+		for(int i=0; i<10; i++)
+			list.add(i);
+		
+		// forEach()
+		// 함수형 인터페이스 : Consumer<? super E> action
+		// 매개변수가 있고 반환값이 없음.
+		// 
+		list.forEach(i->System.out.println(i+","));
+		System.out.println();
+		
+		
+		// removeIf()
+		// 함수형 인터페이스 : Predicate<? super E> filter
+		// 매개변수는 하나, 반환타입 boolean
+		list.removeIf(i->i%2==0);
+		System.out.println(list);
+		
 
+		
+		// replaceAll()
+		// 함수형 인터페이스 : UnaryOperator<E> operator
+		// Function<T> 와 차이점 : 매개변수 타입과 반환 타입이 동일한 점.
+		list.replaceAll(i->i*10);
+
+		
+		
+		// 데이터 소스(Map)
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("1", "1");
+		map.put("2", "2");
+		map.put("3", "3");
+		map.put("4", "4");
+		
+
+		// forEach()
+		// 함수형 인터페이스 : BiConsumer<? super K, ? super V> action
+		// 매개변수가 두 개이고, 반환값이 없는 경우.
+		// (k,v)->System.out.println("{" + k + ", " + v + "}")
+		map.forEach(
+						(k,v)->System.out.println("{" + k + ", " + v + "}")
+					);
+		
 	}
 
 }
